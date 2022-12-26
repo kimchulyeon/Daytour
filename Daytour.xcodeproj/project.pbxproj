@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37B37EBA2959BE1600BE90F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 37B37EB92959BE1600BE90F2 /* GoogleService-Info.plist */; };
 		6E69F7A12959699200BCF3EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E69F7A02959699200BCF3EB /* AppDelegate.swift */; };
 		6E69F7A32959699200BCF3EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E69F7A22959699200BCF3EB /* SceneDelegate.swift */; };
 		6E69F7AA2959699300BCF3EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E69F7A92959699300BCF3EB /* Assets.xcassets */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37B37EB92959BE1600BE90F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		37B37EBB2959BE1B00BE90F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E69F79D2959699200BCF3EB /* Daytour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daytour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E69F7A02959699200BCF3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E69F7A22959699200BCF3EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +45,7 @@
 		6E69F7942959699200BCF3EB = {
 			isa = PBXGroup;
 			children = (
+				37B37EBB2959BE1B00BE90F2 /* GoogleService-Info.plist */,
 				6E69F79F2959699200BCF3EB /* Daytour */,
 				6E69F79E2959699200BCF3EB /* Products */,
 			);
@@ -72,6 +76,7 @@
 				6E69F7A22959699200BCF3EB /* SceneDelegate.swift */,
 				6E69F7A92959699300BCF3EB /* Assets.xcassets */,
 				6E69F7AE2959699300BCF3EB /* Info.plist */,
+				37B37EB92959BE1600BE90F2 /* GoogleService-Info.plist */,
 			);
 			name = Files;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			files = (
 				6E69F7BE29596F3300BCF3EB /* yangjin.ttf in Resources */,
 				6E69F7AA2959699300BCF3EB /* Assets.xcassets in Resources */,
+				37B37EBA2959BE1600BE90F2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
