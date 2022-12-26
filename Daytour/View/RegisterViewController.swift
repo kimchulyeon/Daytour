@@ -108,6 +108,7 @@ class RegisterViewController: UIViewController {
 		super.viewDidLoad()
 		print("hello")
 		configureUI()
+		hideKeyboardWhenTap()
 	}
 
 	//MARK: - helper function
@@ -157,6 +158,19 @@ class RegisterViewController: UIViewController {
 			goToLoginPageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
 		])
+	}
+
+	func hideKeyboardWhenTap() {
+		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+		tap.cancelsTouchesInView = false
+		view.addGestureRecognizer(tap)
+	}
+}
+
+//MARK: - Selectors
+extension RegisterViewController {
+	@objc func dismissKeyboard() {
+		view.endEditing(true)
 	}
 }
 
