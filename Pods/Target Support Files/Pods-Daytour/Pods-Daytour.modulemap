@@ -1,0 +1,6 @@
+framework module Pods_Daytour {
+  umbrella header "Pods-Daytour-umbrella.h"
+
+  export *
+  module * { export * }
+}
