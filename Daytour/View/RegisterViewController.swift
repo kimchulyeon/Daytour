@@ -118,6 +118,7 @@ class RegisterViewController: UIViewController {
 		view.addSubview(titleLabel)
 		NSLayoutConstraint.activate([
 			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
 			titleLabel.heightAnchor.constraint(equalToConstant: 60),
 		])
