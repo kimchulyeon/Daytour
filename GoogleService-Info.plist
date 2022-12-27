@@ -19,16 +19,18 @@
 	<key>STORAGE_BUCKET</key>
 	<string>daytour-949cd.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:674016026554:ios:944683cc5761cbab0bc783</string>
+	<key>DATABASE_URL</key>
+	<string>https://daytour-949cd.firebaseapp.com/__/auth/action?mode=action&amp;oobCode=code</string>
 </dict>
 </plist>

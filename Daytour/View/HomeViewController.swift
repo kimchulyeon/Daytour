@@ -3,14 +3,22 @@ import Firebase
 
 class HomeViewController: UIViewController {
 	//MARK: - Properties
-	
+	private let homeContainer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .blue
+		return view
+	}()
+
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
 		checkLogin()
+//		signOut()
 	}
 	
+
 	//MARK: - API
 	func checkLogin() {
 		if Auth.auth().currentUser?.uid == nil {
@@ -23,9 +31,23 @@ class HomeViewController: UIViewController {
 			configureUI()
 		}
 	}
-	
+
 	//MARK: - helper function
 	func configureUI() {
-		print("Hello Swift")
+		self.view.addSubview(homeContainer)
+		NSLayoutConstraint.activate([
+			homeContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			homeContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			view.trailingAnchor.constraint(equalToSystemSpacingAfter: homeContainer.trailingAnchor, multiplier: 0),
+			homeContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+		])
+	}
+	func signOut() {
+		do {
+			try Auth.auth().signOut()
+		} catch {
+			print("Error Sign Out")
+		}
 	}
 }

@@ -1,11 +1,12 @@
 import UIKit
+import Firebase
 
 class LoginViewController: UIViewController {
 	//MARK: - Properties
 	private let titleLabel: UILabel = {
 		let title = UILabel()
 		title.translatesAutoresizingMaskIntoConstraints = false
-		title.text = "Pleasure to meet you!"
+		title.text = "Sign In"
 		title.font = UIFont.monospacedSystemFont(ofSize: 25, weight: .bold)
 		title.layer.opacity = 0.8
 		title.textColor = UIColor.systemBlue
@@ -16,7 +17,7 @@ class LoginViewController: UIViewController {
 	private let subTitleLabel: UILabel = {
 		let subtitle = UILabel()
 		subtitle.translatesAutoresizingMaskIntoConstraints = false
-		subtitle.text = "Join us and share your experiences!"
+		subtitle.text = "Welcome! Any wonderful experiences?"
 		subtitle.textColor = UIColor.gray
 		subtitle.layer.opacity = 0.8
 		subtitle.font = UIFont.monospacedSystemFont(ofSize: 20, weight: .medium)
@@ -84,45 +85,56 @@ class LoginViewController: UIViewController {
 		let view = UIView()
 		return view
 	}()
-	private let RegisterButton: UIButton = {
+	private lazy var RegisterButton: UIButton = {
 		let btn = UIButton(type: .system)
 		btn.translatesAutoresizingMaskIntoConstraints = false
-		btn.setTitle("Register", for: .normal)
+		btn.setTitle("Let's Go", for: .normal)
 		btn.setTitleColor(UIColor.white, for: .normal)
 		btn.titleLabel?.font = UIFont.monospacedSystemFont(ofSize: 19, weight: .bold)
 		btn.backgroundColor = UIColor(named: "Primary")
 		btn.layer.cornerRadius = 15
+		btn.addTarget(self, action: #selector(onLogin), for: .touchUpInside)
 		return btn
 	}()
-	private let goToLoginPageButton: UIButton = {
+	private lazy var goToLoginPageButton: UIButton = {
 		let btn = UIButton()
 		btn.translatesAutoresizingMaskIntoConstraints = false
-		let attributedTitle = NSMutableAttributedString(string: "Already joinned? ", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .light), .foregroundColor: UIColor.lightGray])
-		attributedTitle.append(NSAttributedString(string: " Log in", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
+		let attributedTitle = NSMutableAttributedString(string: "Don't have account? ", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .light), .foregroundColor: UIColor.lightGray])
+		attributedTitle.append(NSAttributedString(string: " Sign up", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
 		btn.setAttributedTitle(attributedTitle, for: .normal)
+		btn.addTarget(self, action: #selector(goToRegisterPage), for: .touchUpInside)
 		return btn
 	}()
 
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		print("hello")
+		
+		usernameTextField.delegate = self
+		passwordTextField.delegate = self
+
+		configureNavigationBar()
 		configureUI()
 		hideKeyboardWhenTap()
 	}
+	
 
 	//MARK: - helper function
+	func configureNavigationBar() {
+		navigationController?.navigationBar.isHidden = true
+		navigationController?.navigationBar.barStyle = .black
+	}
 	func configureUI() {
-		view.translatesAutoresizingMaskIntoConstraints = false
-		// title label
+		view.backgroundColor = .white
+
 		view.addSubview(titleLabel)
 		NSLayoutConstraint.activate([
 			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-			titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 7),
 			titleLabel.heightAnchor.constraint(equalToConstant: 60),
+			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
 		])
-		// subtitle label
+
 		view.addSubview(subTitleLabel)
 		NSLayoutConstraint.activate([
 			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -131,7 +143,7 @@ class LoginViewController: UIViewController {
 			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			subTitleLabel.heightAnchor.constraint(equalToConstant: 80),
 		])
-		// input field stack view
+
 		view.addSubview(inputStackView)
 		usernameContainer.addSubview(usernameTextField)
 		inputStackView.addArrangedSubview(usernameContainer)
@@ -153,18 +165,21 @@ class LoginViewController: UIViewController {
 			inputStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 			view.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
-		// login page button
+
 		view.addSubview(goToLoginPageButton)
 		NSLayoutConstraint.activate([
 			goToLoginPageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
 		])
 	}
-
 	func hideKeyboardWhenTap() {
 		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
 		tap.cancelsTouchesInView = false
 		view.addGestureRecognizer(tap)
+	}
+	func resetInputField() {
+		usernameTextField.text = nil
+		passwordTextField.text = nil
 	}
 }
 
@@ -173,6 +188,44 @@ extension LoginViewController {
 	@objc func dismissKeyboard() {
 		view.endEditing(true)
 	}
+	@objc func onLogin() {
+		guard let username = usernameTextField.text else { return }
+		guard let password = passwordTextField.text else { return }
+
+		Auth.auth().signIn(withEmail: username, password: password) { result, error in
+			if let error = error {
+				print("Error Log In with \(error)")
+				return
+			}
+
+			let keyWindow = UIApplication.shared.connectedScenes.filter({ $0.activationState == .foregroundActive })
+				.map({ $0 as? UIWindowScene }).compactMap({ $0 }).first?.windows.filter({ $0.isKeyWindow }).first
+
+			if let homeController = keyWindow?.rootViewController as? HomeViewController { homeController.configureUI() }
+			self.dismiss(animated: true, completion: nil)
+		}
+	}
+	@objc func goToRegisterPage() {
+		resetInputField()
+		let controller = RegisterViewController()
+		navigationController?.pushViewController(controller, animated: true)
+	}
 }
+
+//MARK: - text field delegate
+extension LoginViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		if textField == usernameTextField, usernameTextField.text != "" {
+			passwordTextField.becomeFirstResponder()
+		}
+		
+		if textField == passwordTextField, usernameTextField.text != "", passwordTextField.text != "" {
+			passwordTextField.resignFirstResponder()
+			onLogin()
+		}
+		return true
+	}
+}
+
 
 
