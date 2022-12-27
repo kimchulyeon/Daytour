@@ -83,6 +83,7 @@ class RegisterViewController: UIViewController {
 	}()
 	private let genderSegmentedControl: UISegmentedControl = {
 		let sc = UISegmentedControl(items: ["Male", "Female"])
+		sc.translatesAutoresizingMaskIntoConstraints = false
 		sc.backgroundColor = .white
 		sc.tintColor = UIColor(white: 1, alpha: 0.87)
 		sc.selectedSegmentIndex = 0
@@ -94,9 +95,8 @@ class RegisterViewController: UIViewController {
 		view.addSubview(genderSegmentedControl)
 		genderSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
-			genderSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-			view.trailingAnchor.constraint(equalToSystemSpacingAfter: genderSegmentedControl.trailingAnchor, multiplier: 1),
-			genderSegmentedControl.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+			genderSegmentedControl.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+			genderSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0)
 		])
 		return view
 	}()
@@ -124,7 +124,7 @@ class RegisterViewController: UIViewController {
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
 		usernameTextField.delegate = self
 		passwordTextField.delegate = self
 
@@ -132,7 +132,7 @@ class RegisterViewController: UIViewController {
 		configureUI()
 		hideKeyboardWhenTap()
 	}
-	
+
 
 	//MARK: - helper function
 	func configureNavigationBar() {
@@ -180,13 +180,17 @@ class RegisterViewController: UIViewController {
 			inputStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 			view.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
-		
+
 		view.addSubview(goToLoginPageButton)
 		NSLayoutConstraint.activate([
 			goToLoginPageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
 		])
-
+	}
+	
+	func resetInputField() {
+		usernameTextField.text = nil
+		passwordTextField.text = nil
 	}
 
 	func hideKeyboardWhenTap() {
@@ -219,6 +223,11 @@ extension RegisterViewController {
 		Auth.auth().createUser(withEmail: username, password: password) { result, error in
 			if let error = error {
 				print("Fail to Sign Up with \(error)")
+				let alert = UIAlertController(title: "Fail to sign up", message: "The email address is badly formatted!", preferredStyle: UIAlertController.Style.alert)
+				let okAction = UIAlertAction(title: "OK", style: .destructive)
+				alert.addAction(okAction)
+				self.present(alert, animated: true)
+				self.resetInputField()
 				return
 			}
 
@@ -247,7 +256,7 @@ extension RegisterViewController: UITextFieldDelegate {
 		if textField == usernameTextField, usernameTextField.text != "" {
 			passwordTextField.becomeFirstResponder()
 		}
-		
+
 		if textField == passwordTextField, usernameTextField.text != "", passwordTextField.text != "" {
 			print("회원가입!!!!!!!!!!!!!!")
 			passwordTextField.resignFirstResponder()
