@@ -195,6 +195,11 @@ extension LoginViewController {
 		Auth.auth().signIn(withEmail: username, password: password) { result, error in
 			if let error = error {
 				print("Error Log In with \(error)")
+				let alert = UIAlertController(title: "Fail to log in", message: "Your email or password is incorrect. Please try again.", preferredStyle: UIAlertController.Style.alert)
+				let okAction = UIAlertAction(title: "OK", style: .destructive)
+				alert.addAction(okAction)
+				self.present(alert, animated: true)
+				self.resetInputField()
 				return
 			}
 
