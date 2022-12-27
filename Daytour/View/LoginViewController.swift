@@ -50,7 +50,7 @@ class LoginViewController: UIViewController {
 		view.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
 		return view
 	}()
-	private let usernameTextField: UITextField = {
+	let usernameTextField: UITextField = {
 		let tf = UITextField()
 		tf.translatesAutoresizingMaskIntoConstraints = false
 		tf.attributedPlaceholder = NSAttributedString(string: "Username", attributes: [.foregroundColor: UIColor.lightGray, .font: UIFont.monospacedSystemFont(ofSize: 13, weight: .regular)])

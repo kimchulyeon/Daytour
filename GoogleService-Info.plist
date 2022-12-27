@@ -31,6 +31,6 @@
 	<key>GOOGLE_APP_ID</key>
 	<string>1:674016026554:ios:944683cc5761cbab0bc783</string>
 	<key>DATABASE_URL</key>
-	<string>https://daytour-949cd.firebaseapp.com/__/auth/action?mode=action&amp;oobCode=code</string>
+	<string>https://daytour-949cd-default-rtdb.asia-southeast1.firebasedatabase.app/</string>
 </dict>
 </plist>

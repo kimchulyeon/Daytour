@@ -187,7 +187,7 @@ class RegisterViewController: UIViewController {
 			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
 		])
 	}
-	
+
 	func resetInputField() {
 		usernameTextField.text = nil
 		passwordTextField.text = nil
@@ -197,6 +197,15 @@ class RegisterViewController: UIViewController {
 		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
 		tap.cancelsTouchesInView = false
 		view.addGestureRecognizer(tap)
+	}
+
+	func alertErrorMessage(error: Any, title: String) {
+		print("Fail to Sign Up with \(error)")
+		let alert = UIAlertController(title: title, message: "", preferredStyle: UIAlertController.Style.alert)
+		let okAction = UIAlertAction(title: "OK", style: .destructive)
+		alert.addAction(okAction)
+		self.present(alert, animated: true)
+		self.resetInputField()
 	}
 }
 
@@ -222,19 +231,14 @@ extension RegisterViewController {
 
 		Auth.auth().createUser(withEmail: username, password: password) { result, error in
 			if let error = error {
-				print("Fail to Sign Up with \(error)")
-				let alert = UIAlertController(title: "Fail to sign up", message: "The email address is badly formatted!", preferredStyle: UIAlertController.Style.alert)
-				let okAction = UIAlertAction(title: "OK", style: .destructive)
-				alert.addAction(okAction)
-				self.present(alert, animated: true)
-				self.resetInputField()
+				self.alertErrorMessage(error: error, title: "Fail to sign up")
 				return
 			}
 
 			guard let uid = result?.user.uid else { return }
 			let accountInfo = ["email": username, "genderType": genderType] as [String: Any]
 
-			Database.database().reference().child("users").child(uid).updateChildValues(accountInfo) { error, ref in
+			Database.database().reference().child("users").child(uid).updateChildValues(accountInfo, withCompletionBlock: { (error, ref) in
 				let keyWindow = UIApplication.shared.connectedScenes.filter({ scene in
 					scene.activationState == .foregroundActive
 				}).map({ $0 as? UIWindowScene }).compactMap({ $0 }).first?.windows.filter({
@@ -243,7 +247,7 @@ extension RegisterViewController {
 
 				if let homeController = keyWindow?.rootViewController as? HomeViewController { homeController.configureUI() }
 				self.dismiss(animated: true)
-			}
+			})
 		}
 
 	}

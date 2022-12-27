@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
 		super.viewDidLoad()
 
 		checkLogin()
-//		signOut()
+		signOut()
 	}
 	
 
