@@ -6,7 +6,7 @@ class RegisterViewController: UIViewController {
 	private let titleLabel: UILabel = {
 		let title = UILabel()
 		title.translatesAutoresizingMaskIntoConstraints = false
-		title.text = "Sign Up"
+		title.text = "Register"
 		title.font = UIFont.monospacedSystemFont(ofSize: 25, weight: .bold)
 		title.layer.opacity = 0.8
 		title.textColor = UIColor.systemBlue
@@ -96,14 +96,15 @@ class RegisterViewController: UIViewController {
 		genderSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
 			genderSegmentedControl.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-			genderSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0)
+			genderSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			genderSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
 		])
 		return view
 	}()
 	private lazy var RegisterButton: UIButton = {
 		let btn = UIButton(type: .system)
 		btn.translatesAutoresizingMaskIntoConstraints = false
-		btn.setTitle("Sign Up", for: .normal)
+		btn.setTitle("Register", for: .normal)
 		btn.setTitleColor(UIColor.white, for: .normal)
 		btn.titleLabel?.font = UIFont.monospacedSystemFont(ofSize: 19, weight: .bold)
 		btn.backgroundColor = UIColor(named: "Primary")
@@ -115,7 +116,7 @@ class RegisterViewController: UIViewController {
 		let btn = UIButton()
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		let attributedTitle = NSMutableAttributedString(string: "Already have an account? ", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .light), .foregroundColor: UIColor.lightGray])
-		attributedTitle.append(NSAttributedString(string: " Log in", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
+		attributedTitle.append(NSAttributedString(string: " Log in!", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
 		btn.setAttributedTitle(attributedTitle, for: .normal)
 		btn.addTarget(self, action: #selector(goToLoginPage), for: .touchUpInside)
 		return btn
@@ -270,3 +271,25 @@ extension RegisterViewController: UITextFieldDelegate {
 	}
 }
 
+#if DEBUG
+import SwiftUI
+
+struct MainViewControllerPresentable2: UIViewControllerRepresentable {
+  func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+
+  }
+  func makeUIViewController(context: Context) -> some UIViewController {
+	RegisterViewController()
+  }
+}
+
+struct ViewControllerPrepresentable_PreviewProvider2: PreviewProvider {
+  static var previews: some View {
+	  MainViewControllerPresentable2()
+	  .previewDevice("iphone 12 mini")
+	  .previewDisplayName("iphone 12 mini")
+	  .ignoresSafeArea()
+  }
+}
+
+#endif
