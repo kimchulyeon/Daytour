@@ -129,9 +129,11 @@ class LoginViewController: UIViewController {
 		configureUI()
 		hideKeyboardWhenTap()
 	}
-	
+}
 
-	//MARK: - helper function
+
+extension LoginViewController {
+	//MARK: - helper funtion
 	func configureNavigationBar() {
 		navigationController?.navigationBar.isHidden = true
 		navigationController?.navigationBar.barStyle = .black
@@ -140,13 +142,26 @@ class LoginViewController: UIViewController {
 		containerView.backgroundColor = .white
 		
 		view.addSubview(containerScrollView)
+		containerScrollView.addSubview(containerView)
+		containerView.addSubview(titleLabel)
+		containerView.addSubview(subTitleLabel)
+		containerView.addSubview(inputStackView)
+		usernameContainer.addSubview(usernameTextField)
+		passwordContainer.addSubview(passwordTextField)
+		inputStackView.addArrangedSubview(usernameContainer)
+		inputStackView.addArrangedSubview(passwordContainer)
+		inputStackView.addArrangedSubview(emptyContainer)
+		inputStackView.addArrangedSubview(RegisterButton)
+		containerView.addSubview(goToRegisterPageButton)
+		
+		// 스크롤뷰
 		NSLayoutConstraint.activate([
 			containerScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			containerScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			containerScrollView.topAnchor.constraint(equalTo: view.topAnchor),
 			containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		])
-		containerScrollView.addSubview(containerView)
+		// 컨테이너뷰
 		NSLayoutConstraint.activate([
 			containerView.leadingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.trailingAnchor),
@@ -155,16 +170,14 @@ class LoginViewController: UIViewController {
 			
 			containerView.widthAnchor.constraint(equalTo: containerScrollView.frameLayoutGuide.widthAnchor)
 		])
-		
-		containerView.addSubview(titleLabel)
+		// 타이틀 라벨
 		NSLayoutConstraint.activate([
 			titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: containerView.topAnchor, multiplier: 7),
 			titleLabel.heightAnchor.constraint(equalToConstant: 60),
 			titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
 		])
-
-		containerView.addSubview(subTitleLabel)
+		// 서브 타이틀 라벨
 		NSLayoutConstraint.activate([
 			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
 			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: subTitleLabel.trailingAnchor, multiplier: 2),
@@ -172,14 +185,7 @@ class LoginViewController: UIViewController {
 			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
 			subTitleLabel.heightAnchor.constraint(equalToConstant: 80),
 		])
-
-		containerView.addSubview(inputStackView)
-		usernameContainer.addSubview(usernameTextField)
-		inputStackView.addArrangedSubview(usernameContainer)
-		passwordContainer.addSubview(passwordTextField)
-		inputStackView.addArrangedSubview(passwordContainer)
-		inputStackView.addArrangedSubview(emptyContainer)
-		inputStackView.addArrangedSubview(RegisterButton)
+		// 텍스트 필드
 		NSLayoutConstraint.activate([
 			usernameContainer.heightAnchor.constraint(equalToConstant: 60),
 
@@ -194,8 +200,7 @@ class LoginViewController: UIViewController {
 			inputStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
 			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
-
-		containerView.addSubview(goToRegisterPageButton)
+		// 회원가입 페이지 이동 버튼
 		NSLayoutConstraint.activate([
 			goToRegisterPageButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 			goToRegisterPageButton.topAnchor.constraint(equalTo: RegisterButton.bottomAnchor, constant: 80)
@@ -210,10 +215,8 @@ class LoginViewController: UIViewController {
 		usernameTextField.text = nil
 		passwordTextField.text = nil
 	}
-}
-
-//MARK: - Selectors
-extension LoginViewController {
+	
+	//MARK: - Selectors
 	@objc func dismissKeyboard() {
 		containerView.endEditing(true)
 	}
