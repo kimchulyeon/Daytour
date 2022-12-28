@@ -3,10 +3,22 @@ import Firebase
 
 class LoginViewController: UIViewController {
 	//MARK: - Properties
+	private let containerView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	private let containerScrollView: UIScrollView = {
+		let sv = UIScrollView()
+		sv.translatesAutoresizingMaskIntoConstraints = false
+		sv.alwaysBounceVertical = true
+		sv.isUserInteractionEnabled = true
+		return sv
+	}()
 	private let titleLabel: UILabel = {
 		let title = UILabel()
 		title.translatesAutoresizingMaskIntoConstraints = false
-		title.text = "Sign In"
+		title.text = "Log In"
 		title.font = UIFont.monospacedSystemFont(ofSize: 25, weight: .bold)
 		title.layer.opacity = 0.8
 		title.textColor = UIColor.systemBlue
@@ -96,11 +108,11 @@ class LoginViewController: UIViewController {
 		btn.addTarget(self, action: #selector(onLogin), for: .touchUpInside)
 		return btn
 	}()
-	private lazy var goToLoginPageButton: UIButton = {
+	private lazy var goToRegisterPageButton: UIButton = {
 		let btn = UIButton()
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		let attributedTitle = NSMutableAttributedString(string: "Don't have account? ", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .light), .foregroundColor: UIColor.lightGray])
-		attributedTitle.append(NSAttributedString(string: " Sign up", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
+		attributedTitle.append(NSAttributedString(string: "Register!", attributes: [.font: UIFont.monospacedSystemFont(ofSize: 16, weight: .medium), .foregroundColor: UIColor(named: "Primary")!]))
 		btn.setAttributedTitle(attributedTitle, for: .normal)
 		btn.addTarget(self, action: #selector(goToRegisterPage), for: .touchUpInside)
 		return btn
@@ -125,26 +137,43 @@ class LoginViewController: UIViewController {
 		navigationController?.navigationBar.barStyle = .black
 	}
 	func configureUI() {
-		view.backgroundColor = .white
-
-		view.addSubview(titleLabel)
+		containerView.backgroundColor = .white
+		
+		view.addSubview(containerScrollView)
 		NSLayoutConstraint.activate([
-			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 7),
+			containerScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			containerScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			containerScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+			containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+		])
+		containerScrollView.addSubview(containerView)
+		NSLayoutConstraint.activate([
+			containerView.leadingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.trailingAnchor),
+			containerView.topAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.topAnchor),
+			containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			
+			containerView.widthAnchor.constraint(equalTo: containerScrollView.frameLayoutGuide.widthAnchor)
+		])
+		
+		containerView.addSubview(titleLabel)
+		NSLayoutConstraint.activate([
+			titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: containerView.topAnchor, multiplier: 7),
 			titleLabel.heightAnchor.constraint(equalToConstant: 60),
-			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+			titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
 		])
 
-		view.addSubview(subTitleLabel)
+		containerView.addSubview(subTitleLabel)
 		NSLayoutConstraint.activate([
-			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			view.trailingAnchor.constraint(equalToSystemSpacingAfter: subTitleLabel.trailingAnchor, multiplier: 2),
+			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: subTitleLabel.trailingAnchor, multiplier: 2),
 			subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
 			subTitleLabel.heightAnchor.constraint(equalToConstant: 80),
 		])
 
-		view.addSubview(inputStackView)
+		containerView.addSubview(inputStackView)
 		usernameContainer.addSubview(usernameTextField)
 		inputStackView.addArrangedSubview(usernameContainer)
 		passwordContainer.addSubview(passwordTextField)
@@ -162,20 +191,20 @@ class LoginViewController: UIViewController {
 			passwordTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: passwordContainer.trailingAnchor, multiplier: 2),
 
 			inputStackView.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 50),
-			inputStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			view.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
+			inputStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
 
-		view.addSubview(goToLoginPageButton)
+		containerView.addSubview(goToRegisterPageButton)
 		NSLayoutConstraint.activate([
-			goToLoginPageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+			goToRegisterPageButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			goToRegisterPageButton.topAnchor.constraint(equalTo: RegisterButton.bottomAnchor, constant: 80)
 		])
 	}
 	func hideKeyboardWhenTap() {
 		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
 		tap.cancelsTouchesInView = false
-		view.addGestureRecognizer(tap)
+		containerView.addGestureRecognizer(tap)
 	}
 	func resetInputField() {
 		usernameTextField.text = nil
@@ -186,7 +215,7 @@ class LoginViewController: UIViewController {
 //MARK: - Selectors
 extension LoginViewController {
 	@objc func dismissKeyboard() {
-		view.endEditing(true)
+		containerView.endEditing(true)
 	}
 	@objc func onLogin() {
 		guard let username = usernameTextField.text else { return }
@@ -232,5 +261,25 @@ extension LoginViewController: UITextFieldDelegate {
 	}
 }
 
+#if DEBUG
+import SwiftUI
 
+struct MainViewControllerPresentable: UIViewControllerRepresentable {
+  func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
+  }
+  func makeUIViewController(context: Context) -> some UIViewController {
+	LoginViewController()
+  }
+}
+
+struct ViewControllerPrepresentable_PreviewProvider: PreviewProvider {
+  static var previews: some View {
+	  MainViewControllerPresentable()
+	  .previewDevice("iphone 12 mini")
+	  .previewDisplayName("iphone 12 mini")
+	  .ignoresSafeArea()
+  }
+}
+
+#endif
