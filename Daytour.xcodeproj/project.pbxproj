@@ -18,6 +18,8 @@
 		6EFA45AB295AB34800307EFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EFA45AA295AB34800307EFA /* GoogleService-Info.plist */; };
 		6EFA45AE295D284800307EFA /* ViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFA45AD295D284800307EFA /* ViewController+Ext.swift */; };
 		6EFA45DC295D578E00307EFA /* HomeHeaderStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFA45DB295D578E00307EFA /* HomeHeaderStackView.swift */; };
+		6EFA45DE295D63A200307EFA /* HomeBodyMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFA45DD295D63A200307EFA /* HomeBodyMapView.swift */; };
+		6EFA45E2295D710900307EFA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFA45E1295D710900307EFA /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		6EFA45AA295AB34800307EFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6EFA45AD295D284800307EFA /* ViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Ext.swift"; sourceTree = "<group>"; };
 		6EFA45DB295D578E00307EFA /* HomeHeaderStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderStackView.swift; sourceTree = "<group>"; };
+		6EFA45DD295D63A200307EFA /* HomeBodyMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBodyMapView.swift; sourceTree = "<group>"; };
+		6EFA45E1295D710900307EFA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D19F40AB6977AA67406CF1AF /* Pods_Daytour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Daytour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E92A4012FEB4051F36662F81 /* Pods-Daytour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daytour.release.xcconfig"; path = "Target Support Files/Pods-Daytour/Pods-Daytour.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +111,7 @@
 				6E69F7B629596A0E00BCF3EB /* HomeViewController.swift */,
 				6E69F7B829596B6800BCF3EB /* LoginViewController.swift */,
 				6E69F7BA29596B7D00BCF3EB /* RegisterViewController.swift */,
+				6EFA45E1295D710900307EFA /* MapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				6EFA45DB295D578E00307EFA /* HomeHeaderStackView.swift */,
+				6EFA45DD295D63A200307EFA /* HomeBodyMapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -258,12 +264,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EFA45DE295D63A200307EFA /* HomeBodyMapView.swift in Sources */,
 				6E69F7B929596B6800BCF3EB /* LoginViewController.swift in Sources */,
 				6E69F7BB29596B7D00BCF3EB /* RegisterViewController.swift in Sources */,
 				6EFA45AE295D284800307EFA /* ViewController+Ext.swift in Sources */,
 				6E69F7A12959699200BCF3EB /* AppDelegate.swift in Sources */,
 				6E69F7A32959699200BCF3EB /* SceneDelegate.swift in Sources */,
 				6EFA45DC295D578E00307EFA /* HomeHeaderStackView.swift in Sources */,
+				6EFA45E2295D710900307EFA /* MapViewController.swift in Sources */,
 				6E69F7B729596A0E00BCF3EB /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

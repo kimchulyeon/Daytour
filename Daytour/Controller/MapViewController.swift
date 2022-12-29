@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-class TestVC: UIViewController {
+class MapViewController: UIViewController {
 	private let mapView = MKMapView()
 	override func viewDidLoad() {
 		super.viewDidLoad()

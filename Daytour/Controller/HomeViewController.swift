@@ -8,7 +8,8 @@ class HomeViewController: UIViewController {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-	let homeHeader = HomeHeaderStackView()
+	private let homeHeader = HomeHeaderStackView()
+	private let homeBody = HomeBodyMapView()
 
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
@@ -35,6 +36,7 @@ class HomeViewController: UIViewController {
 	func configureUI() {
 		view.addSubview(homeContainer)
 		homeContainer.addSubview(homeHeader)
+		homeContainer.addSubview(homeBody)
 		
 		// Container
 		NSLayoutConstraint.activate([
@@ -49,17 +51,24 @@ class HomeViewController: UIViewController {
 			homeHeader.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor),
 			homeHeader.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor)
 		])
+		// Home body
+		NSLayoutConstraint.activate([
+			homeBody.topAnchor.constraint(equalTo: homeHeader.bottomAnchor, constant: 25),
+			homeBody.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor, constant: 10),
+			homeBody.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor, constant: -10),
+			homeBody.bottomAnchor.constraint(equalTo: homeContainer.bottomAnchor, constant: -150)
+		])
 	}
-	func signOut() {
-		do {
-			try Auth.auth().signOut()
-			let nav = UINavigationController(rootViewController: LoginViewController())
-			nav.modalPresentationStyle = .fullScreen
-			self.present(nav, animated: false)
-		} catch {
-			print("Error Sign Out")
-		}
-	}
+//	func signOut() {
+//		do {
+//			try Auth.auth().signOut()
+//			let nav = UINavigationController(rootViewController: LoginViewController())
+//			nav.modalPresentationStyle = .fullScreen
+//			self.present(nav, animated: false)
+//		} catch {
+//			print("Error Sign Out")
+//		}
+//	}
 	
 	//MARK: - Selector
 //	@objc func handleLogout() {
