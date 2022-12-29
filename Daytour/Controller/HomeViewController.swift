@@ -6,24 +6,15 @@ class HomeViewController: UIViewController {
 	private let homeContainer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .blue
 		return view
 	}()
-	lazy var logoutButton: UIButton = {
-		let btn = UIButton(type: .system)
-		btn.translatesAutoresizingMaskIntoConstraints = false
-		btn.setTitle("logout", for: .normal)
-		btn.setTitleColor(UIColor.white, for: .normal)
-		btn.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
-		return btn
-	}()
+	let homeHeader = HomeHeaderStackView()
 
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		checkLogin()
-//		signOut()
 	}
 	
 
@@ -43,7 +34,7 @@ class HomeViewController: UIViewController {
 	//MARK: - helper function
 	func configureUI() {
 		view.addSubview(homeContainer)
-		homeContainer.addSubview(logoutButton)
+		homeContainer.addSubview(homeHeader)
 		
 		// Container
 		NSLayoutConstraint.activate([
@@ -52,10 +43,11 @@ class HomeViewController: UIViewController {
 			view.trailingAnchor.constraint(equalToSystemSpacingAfter: homeContainer.trailingAnchor, multiplier: 0),
 			homeContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		])
-		// logout button
+		// Home header
 		NSLayoutConstraint.activate([
-			logoutButton.centerYAnchor.constraint(equalTo: homeContainer.centerYAnchor),
-			logoutButton.centerXAnchor.constraint(equalTo: homeContainer.centerXAnchor)
+			homeHeader.topAnchor.constraint(equalTo: homeContainer.topAnchor),
+			homeHeader.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor),
+			homeHeader.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor)
 		])
 	}
 	func signOut() {
@@ -70,7 +62,7 @@ class HomeViewController: UIViewController {
 	}
 	
 	//MARK: - Selector
-	@objc func handleLogout() {
-		self.signOut()
-	}
+//	@objc func handleLogout() {
+//		self.signOut()
+//	}
 }
