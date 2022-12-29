@@ -121,7 +121,7 @@ class LoginViewController: UIViewController {
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
 		usernameTextField.delegate = self
 		passwordTextField.delegate = self
 
@@ -140,7 +140,7 @@ extension LoginViewController {
 	}
 	func configureUI() {
 		containerView.backgroundColor = .white
-		
+
 		view.addSubview(containerScrollView)
 		containerScrollView.addSubview(containerView)
 		containerView.addSubview(titleLabel)
@@ -153,7 +153,7 @@ extension LoginViewController {
 		inputStackView.addArrangedSubview(emptyContainer)
 		inputStackView.addArrangedSubview(RegisterButton)
 		containerView.addSubview(goToRegisterPageButton)
-		
+
 		// 스크롤뷰
 		NSLayoutConstraint.activate([
 			containerScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -167,7 +167,7 @@ extension LoginViewController {
 			containerView.trailingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.trailingAnchor),
 			containerView.topAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.topAnchor),
 			containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			
+
 			containerView.widthAnchor.constraint(equalTo: containerScrollView.frameLayoutGuide.widthAnchor)
 		])
 		// 타이틀 라벨
@@ -188,22 +188,20 @@ extension LoginViewController {
 		// 텍스트 필드
 		NSLayoutConstraint.activate([
 			usernameContainer.heightAnchor.constraint(equalToConstant: 60),
-
 			usernameTextField.centerYAnchor.constraint(equalTo: usernameContainer.centerYAnchor),
 			usernameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: usernameContainer.leadingAnchor, multiplier: 2),
 			usernameTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: usernameContainer.trailingAnchor, multiplier: 2),
 			passwordTextField.centerYAnchor.constraint(equalTo: passwordContainer.centerYAnchor),
 			passwordTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: passwordContainer.leadingAnchor, multiplier: 2),
 			passwordTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: passwordContainer.trailingAnchor, multiplier: 2),
-
-			inputStackView.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 50),
+			inputStackView.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 30),
 			inputStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
 			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
 		// 회원가입 페이지 이동 버튼
 		NSLayoutConstraint.activate([
 			goToRegisterPageButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-			goToRegisterPageButton.topAnchor.constraint(equalTo: RegisterButton.bottomAnchor, constant: 80)
+			goToRegisterPageButton.topAnchor.constraint(equalTo: RegisterButton.bottomAnchor, constant: 130)
 		])
 	}
 	func hideKeyboardWhenTap() {
@@ -215,7 +213,7 @@ extension LoginViewController {
 		usernameTextField.text = nil
 		passwordTextField.text = nil
 	}
-	
+
 	//MARK: - Selectors
 	@objc func dismissKeyboard() {
 		containerView.endEditing(true)
@@ -226,11 +224,7 @@ extension LoginViewController {
 
 		Auth.auth().signIn(withEmail: username, password: password) { result, error in
 			if let error = error {
-				print("Error Log In with \(error)")
-				let alert = UIAlertController(title: "Fail to log in", message: "Your email or password is incorrect. Please try again.", preferredStyle: UIAlertController.Style.alert)
-				let okAction = UIAlertAction(title: "OK", style: .destructive)
-				alert.addAction(okAction)
-				self.present(alert, animated: true)
+				self.generateErrorAlert(error: error, title: "Fail to log in", message: "Your email or password is incorrect. Please try again.", okTitle: "OK")
 				self.resetInputField()
 				return
 			}
@@ -255,7 +249,7 @@ extension LoginViewController: UITextFieldDelegate {
 		if textField == usernameTextField, usernameTextField.text != "" {
 			passwordTextField.becomeFirstResponder()
 		}
-		
+
 		if textField == passwordTextField, usernameTextField.text != "", passwordTextField.text != "" {
 			passwordTextField.resignFirstResponder()
 			onLogin()
@@ -265,24 +259,24 @@ extension LoginViewController: UITextFieldDelegate {
 }
 
 #if DEBUG
-import SwiftUI
+	import SwiftUI
 
-struct MainViewControllerPresentable: UIViewControllerRepresentable {
-  func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+	struct MainViewControllerPresentable: UIViewControllerRepresentable {
+		func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
-  }
-  func makeUIViewController(context: Context) -> some UIViewController {
-	LoginViewController()
-  }
-}
+		}
+		func makeUIViewController(context: Context) -> some UIViewController {
+			LoginViewController()
+		}
+	}
 
-struct ViewControllerPrepresentable_PreviewProvider: PreviewProvider {
-  static var previews: some View {
-	  MainViewControllerPresentable()
-	  .previewDevice("iphone 12 mini")
-	  .previewDisplayName("iphone 12 mini")
-	  .ignoresSafeArea()
-  }
-}
+	struct ViewControllerPrepresentable_PreviewProvider: PreviewProvider {
+		static var previews: some View {
+			MainViewControllerPresentable()
+				.previewDevice("iphone 12 mini")
+				.previewDisplayName("iphone 12 mini")
+				.ignoresSafeArea()
+		}
+	}
 
 #endif
