@@ -8,7 +8,7 @@ extension UIViewController {
 	///   - title: 알림창 타이틀
 	///   - message: 알림창 내용
 	///   - okTitle: 알림창 버튼 타이틀
-	func generateErrorAlert(error: Any, title: String, message: String, okTitle: String) {
+	func generateErrorAlert(error: Any = "", title: String, message: String = "", okTitle: String) {
 		print("Error Log In with \(error)")
 		let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
 		let okAction = UIAlertAction(title: okTitle, style: .destructive)
