@@ -14,7 +14,7 @@ class HomeHeaderStackView: UIStackView {
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.text = "Welcome!"
 		label.font = UIFont.monospacedSystemFont(ofSize: 18, weight: .bold)
-		label.layer.opacity = 0.5
+		label.layer.opacity = 0.5ㅓㅁ
 		label.textColor = UIColor(named: "Title")
 		return label
 	}()
