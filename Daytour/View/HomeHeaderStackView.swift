@@ -1,6 +1,13 @@
 import UIKit
 
+protocol HomeHeaderStackViewDelegate: AnyObject {
+	func clickProfileImage()
+}
+
 class HomeHeaderStackView: UIStackView {
+
+	weak var delegate: HomeHeaderStackViewDelegate?
+
 	//MARK: - Properties
 	let titleStackView: UIStackView = {
 		let stack = UIStackView()
@@ -26,13 +33,14 @@ class HomeHeaderStackView: UIStackView {
 		label.textColor = UIColor(named: "Primary")
 		return label
 	}()
-	let profileImgButton: UIButton = {
+	lazy var profileImgButton: UIButton = {
 		let btn = UIButton(type: .system)
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		btn.setImage(UIImage(systemName: "person.crop.circle"), for: .normal)
 		btn.imageView?.contentMode = .scaleAspectFit
 		btn.tintColor = UIColor(named: "Secondary")
 		btn.setPreferredSymbolConfiguration(.init(pointSize: 30, weight: .regular, scale: .default), forImageIn: .normal)
+		btn.addTarget(self, action: #selector(logout), for: .touchUpInside)
 		return btn
 	}()
 
@@ -44,7 +52,7 @@ class HomeHeaderStackView: UIStackView {
 		distribution = .equalCentering
 		isLayoutMarginsRelativeArrangement = true
 		layoutMargins = .init(top: 15, left: 20, bottom: 0, right: 20)
-		
+
 		[titleLabel, nicknameLabel].forEach { view in
 			titleStackView.addArrangedSubview(view)
 		}
@@ -55,5 +63,12 @@ class HomeHeaderStackView: UIStackView {
 
 	required init(coder: NSCoder) {
 		super.init(coder: coder)
+	}
+}
+
+extension HomeHeaderStackView {
+	//MARK: - selector
+	@objc func logout() {
+		delegate?.clickProfileImage()
 	}
 }

@@ -1,4 +1,5 @@
 import UIKit
+import Firebase
 
 extension UIViewController {
 	
@@ -14,5 +15,18 @@ extension UIViewController {
 		let okAction = UIAlertAction(title: okTitle, style: .destructive)
 		alert.addAction(okAction)
 		self.present(alert, animated: true)
+	}
+	
+	
+	/// 로그아웃
+	func signOut() {
+		do {
+			try Auth.auth().signOut()
+			let nav = UINavigationController(rootViewController: LoginViewController())
+			nav.modalPresentationStyle = .fullScreen
+			self.present(nav, animated: false)
+		} catch {
+			print("Error Sign Out")
+		}
 	}
 }

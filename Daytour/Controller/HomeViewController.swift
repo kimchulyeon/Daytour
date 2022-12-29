@@ -14,6 +14,8 @@ class HomeViewController: UIViewController {
 	//MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		homeHeader.delegate = self
 
 		checkLogin()
 	}
@@ -59,19 +61,13 @@ class HomeViewController: UIViewController {
 			homeBody.bottomAnchor.constraint(equalTo: homeContainer.bottomAnchor, constant: -150)
 		])
 	}
-//	func signOut() {
-//		do {
-//			try Auth.auth().signOut()
-//			let nav = UINavigationController(rootViewController: LoginViewController())
-//			nav.modalPresentationStyle = .fullScreen
-//			self.present(nav, animated: false)
-//		} catch {
-//			print("Error Sign Out")
-//		}
-//	}
 	
 	//MARK: - Selector
-//	@objc func handleLogout() {
-//		self.signOut()
-//	}
+	
+}
+
+extension HomeViewController: HomeHeaderStackViewDelegate {
+	func clickProfileImage() {
+		signOut()
+	}
 }
