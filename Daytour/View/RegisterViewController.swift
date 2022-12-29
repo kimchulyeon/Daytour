@@ -2,7 +2,19 @@ import UIKit
 import Firebase
 
 class RegisterViewController: UIViewController {
-	///MARK: - Properties
+	//MARK: - Properties
+	private let containerView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	private let containerScrollView: UIScrollView = {
+		let sv = UIScrollView()
+		sv.translatesAutoresizingMaskIntoConstraints = false
+		sv.alwaysBounceVertical = true
+		sv.isUserInteractionEnabled = true
+		return sv
+	}()
 	private let titleLabel: UILabel = {
 		let title = UILabel()
 		title.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +93,28 @@ class RegisterViewController: UIViewController {
 		tf.isSecureTextEntry = true
 		return tf
 	}()
+	private let passwordCheckContainer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.layer.cornerRadius = 15
+		view.backgroundColor = .white
+		view.layer.masksToBounds = false
+		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowOpacity = 0.1
+		view.layer.shadowRadius = 10
+		view.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+		return view
+	}()
+	private let passwordTextCheckField: UITextField = {
+		let tf = UITextField()
+		tf.translatesAutoresizingMaskIntoConstraints = false
+		tf.borderStyle = .none
+		tf.attributedPlaceholder = NSAttributedString(string: "Password Check", attributes: [.foregroundColor: UIColor.lightGray, .font: UIFont.monospacedSystemFont(ofSize: 13, weight: .regular)])
+		tf.autocapitalizationType = .none
+		tf.keyboardAppearance = .dark
+		tf.isSecureTextEntry = true
+		return tf
+	}()
 	private let genderSegmentedControl: UISegmentedControl = {
 		let sc = UISegmentedControl(items: ["Male", "Female"])
 		sc.translatesAutoresizingMaskIntoConstraints = false
@@ -88,18 +122,6 @@ class RegisterViewController: UIViewController {
 		sc.tintColor = UIColor(white: 1, alpha: 0.87)
 		sc.selectedSegmentIndex = 0
 		return sc
-	}()
-	private lazy var emptyContainer: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(genderSegmentedControl)
-		genderSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-		NSLayoutConstraint.activate([
-			genderSegmentedControl.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-			genderSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			genderSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-		])
-		return view
 	}()
 	private lazy var RegisterButton: UIButton = {
 		let btn = UIButton(type: .system)
@@ -134,61 +156,84 @@ class RegisterViewController: UIViewController {
 		hideKeyboardWhenTap()
 	}
 
+}
 
+extension RegisterViewController {
 	//MARK: - helper function
 	func configureNavigationBar() {
 		navigationController?.navigationBar.isHidden = true
 		navigationController?.navigationBar.barStyle = .black
 	}
 	func configureUI() {
-		view.backgroundColor = .white
+		containerView.backgroundColor = .white
 
-		view.addSubview(titleLabel)
+		view.addSubview(containerScrollView)
+		containerScrollView.addSubview(containerView)
+		containerView.addSubview(titleLabel)
+		containerView.addSubview(subTitleLabel)
+		containerView.addSubview(inputStackView)
+		usernameContainer.addSubview(usernameTextField)
+		passwordContainer.addSubview(passwordTextField)
+		passwordCheckContainer.addSubview(passwordTextCheckField)
+		inputStackView.addArrangedSubview(usernameContainer)
+		inputStackView.addArrangedSubview(passwordContainer)
+		inputStackView.addArrangedSubview(passwordCheckContainer)
+		inputStackView.addArrangedSubview(RegisterButton)
+		containerView.addSubview(goToLoginPageButton)
+		
+		// 스크롤뷰
 		NSLayoutConstraint.activate([
-			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 7),
-			titleLabel.heightAnchor.constraint(equalToConstant: 60),
-			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+			containerScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			containerScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			containerScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+			containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		])
-
-		view.addSubview(subTitleLabel)
+		// 컨테이너뷰
 		NSLayoutConstraint.activate([
-			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			view.trailingAnchor.constraint(equalToSystemSpacingAfter: subTitleLabel.trailingAnchor, multiplier: 2),
+			containerView.leadingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.trailingAnchor),
+			containerView.topAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.topAnchor),
+			containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			
+			containerView.widthAnchor.constraint(equalTo: containerScrollView.frameLayoutGuide.widthAnchor)
+		])
+		// 타이틀 라벨
+		NSLayoutConstraint.activate([
+			titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			titleLabel.topAnchor.constraint(equalToSystemSpacingBelow: containerView.safeAreaLayoutGuide.topAnchor, multiplier: 7),
+			titleLabel.heightAnchor.constraint(equalToConstant: 60),
+			titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+		])
+		// 서브 타이틀 라벨
+		NSLayoutConstraint.activate([
+			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: subTitleLabel.trailingAnchor, multiplier: 2),
 			subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-			subTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			subTitleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
 			subTitleLabel.heightAnchor.constraint(equalToConstant: 80),
 		])
-
-		view.addSubview(inputStackView)
-		usernameContainer.addSubview(usernameTextField)
-		inputStackView.addArrangedSubview(usernameContainer)
-		passwordContainer.addSubview(passwordTextField)
-		inputStackView.addArrangedSubview(passwordContainer)
-		inputStackView.addArrangedSubview(emptyContainer)
-		inputStackView.addArrangedSubview(RegisterButton)
+		// 인풋 필드
 		NSLayoutConstraint.activate([
 			usernameContainer.heightAnchor.constraint(equalToConstant: 60),
-
 			usernameTextField.centerYAnchor.constraint(equalTo: usernameContainer.centerYAnchor),
 			usernameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: usernameContainer.leadingAnchor, multiplier: 2),
 			usernameContainer.trailingAnchor.constraint(equalToSystemSpacingAfter: usernameTextField.trailingAnchor, multiplier: 2),
 			passwordTextField.centerYAnchor.constraint(equalTo: passwordContainer.centerYAnchor),
 			passwordTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: passwordContainer.leadingAnchor, multiplier: 2),
-			passwordContainer.trailingAnchor.constraint(equalToSystemSpacingAfter: passwordTextField.trailingAnchor, multiplier: 2),
-
-			inputStackView.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 50),
-			inputStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			view.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
+			passwordTextField.trailingAnchor.constraint(equalTo: passwordContainer.trailingAnchor, constant: -16),
+			passwordTextCheckField.centerYAnchor.constraint(equalTo: passwordCheckContainer.centerYAnchor),
+			passwordTextCheckField.leadingAnchor.constraint(equalToSystemSpacingAfter: passwordCheckContainer.leadingAnchor, multiplier: 2),
+			passwordTextCheckField.trailingAnchor.constraint(equalTo: passwordCheckContainer.trailingAnchor, constant: -16),
+			inputStackView.topAnchor.constraint(equalTo: subTitleLabel.bottomAnchor, constant: 30),
+			inputStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+			containerView.trailingAnchor.constraint(equalToSystemSpacingAfter: inputStackView.trailingAnchor, multiplier: 2)
 		])
-
-		view.addSubview(goToLoginPageButton)
+		// 로그인 페이지 이동 버튼
 		NSLayoutConstraint.activate([
-			goToLoginPageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			goToLoginPageButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+			goToLoginPageButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			goToLoginPageButton.topAnchor.constraint(equalTo: RegisterButton.bottomAnchor, constant: 130)
 		])
 	}
-
 	func resetInputField() {
 		usernameTextField.text = nil
 		passwordTextField.text = nil
@@ -197,7 +242,7 @@ class RegisterViewController: UIViewController {
 	func hideKeyboardWhenTap() {
 		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
 		tap.cancelsTouchesInView = false
-		view.addGestureRecognizer(tap)
+		containerView.addGestureRecognizer(tap)
 	}
 
 	func alertErrorMessage(error: Any, title: String) {
@@ -208,13 +253,11 @@ class RegisterViewController: UIViewController {
 		self.present(alert, animated: true)
 		self.resetInputField()
 	}
-}
-
-//MARK: - Selectors
-extension RegisterViewController {
+	
+	//MARK: - Selectors
 	// background click dismiss keyboard
 	@objc func dismissKeyboard() {
-		view.endEditing(true)
+		containerView.endEditing(true)
 	}
 	// Register button click
 	@objc func onClickRegister() {
