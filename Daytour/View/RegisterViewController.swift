@@ -150,6 +150,7 @@ class RegisterViewController: UIViewController {
 
 		usernameTextField.delegate = self
 		passwordTextField.delegate = self
+		passwordTextCheckField.delegate = self
 
 		configureNavigationBar()
 		configureUI()
@@ -180,7 +181,7 @@ extension RegisterViewController {
 		inputStackView.addArrangedSubview(passwordCheckContainer)
 		inputStackView.addArrangedSubview(RegisterButton)
 		containerView.addSubview(goToLoginPageButton)
-		
+
 		// 스크롤뷰
 		NSLayoutConstraint.activate([
 			containerScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -194,7 +195,7 @@ extension RegisterViewController {
 			containerView.trailingAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.trailingAnchor),
 			containerView.topAnchor.constraint(equalTo: containerScrollView.contentLayoutGuide.topAnchor),
 			containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			
+
 			containerView.widthAnchor.constraint(equalTo: containerScrollView.frameLayoutGuide.widthAnchor)
 		])
 		// 타이틀 라벨
@@ -237,6 +238,7 @@ extension RegisterViewController {
 	func resetInputField() {
 		usernameTextField.text = nil
 		passwordTextField.text = nil
+		passwordTextCheckField.text = nil
 	}
 
 	func hideKeyboardWhenTap() {
@@ -245,23 +247,10 @@ extension RegisterViewController {
 		containerView.addGestureRecognizer(tap)
 	}
 
-	func alertErrorMessage(error: Any, title: String) {
-		print("Fail to Sign Up with \(error)")
-		let alert = UIAlertController(title: title, message: "", preferredStyle: UIAlertController.Style.alert)
-		let okAction = UIAlertAction(title: "OK", style: .destructive)
-		alert.addAction(okAction)
-		self.present(alert, animated: true)
-		self.resetInputField()
-	}
-	
 	//MARK: - Selectors
 	// background click dismiss keyboard
 	@objc func dismissKeyboard() {
 		containerView.endEditing(true)
-	}
-	// Register button click
-	@objc func onClickRegister() {
-		print("register click::::::")
 	}
 	// go to login button click
 	@objc func goToLoginPage() {
@@ -269,31 +258,41 @@ extension RegisterViewController {
 	}
 	// Sign Up button click
 	@objc func onSignUp() {
-		guard let username = usernameTextField.text, usernameTextField.text != "" else { return }
-		guard let password = passwordTextField.text, passwordTextField.text != "" else { return }
-		let genderType = genderSegmentedControl.selectedSegmentIndex
-
-		Auth.auth().createUser(withEmail: username, password: password) { result, error in
-			if let error = error {
-				self.alertErrorMessage(error: error, title: "Fail to sign up")
-				return
-			}
-
-			guard let uid = result?.user.uid else { return }
-			let accountInfo = ["email": username, "genderType": genderType] as [String: Any]
-
-			Database.database().reference().child("users").child(uid).updateChildValues(accountInfo, withCompletionBlock: { (error, ref) in
-				let keyWindow = UIApplication.shared.connectedScenes.filter({ scene in
-					scene.activationState == .foregroundActive
-				}).map({ $0 as? UIWindowScene }).compactMap({ $0 }).first?.windows.filter({
-					$0.isKeyWindow
-				}).first
-
-				if let homeController = keyWindow?.rootViewController as? HomeViewController { homeController.configureUI() }
-				self.dismiss(animated: true)
-			})
+		guard let username = usernameTextField.text, usernameTextField.text != "" else {
+			self.generateErrorAlert(title: "Fail to sign up", message: "Username cannot be empty.", okTitle: "OK")
+			return
+		}
+		guard let password = passwordTextField.text, passwordTextField.text != "" else {
+			self.generateErrorAlert(title: "Fail to sign up", message: "Password cannot be empty.", okTitle: "OK")
+			return
 		}
 
+		if passwordTextField.text == passwordTextCheckField.text {
+			Auth.auth().createUser(withEmail: username, password: password) { result, error in
+				if let error = error {
+					self.generateErrorAlert(error: error, title: "Fail to sign up", message: "Something went wrong. Please check and try again.", okTitle: "OK")
+					self.resetInputField()
+					return
+				}
+
+				guard let uid = result?.user.uid else { return }
+				let accountInfo = ["email": username] as [String: Any]
+
+				Database.database().reference().child("users").child(uid).updateChildValues(accountInfo, withCompletionBlock: { (error, ref) in
+					let keyWindow = UIApplication.shared.connectedScenes.filter({ scene in
+						scene.activationState == .foregroundActive
+					}).map({ $0 as? UIWindowScene }).compactMap({ $0 }).first?.windows.filter({
+						$0.isKeyWindow
+					}).first
+
+					if let homeController = keyWindow?.rootViewController as? HomeViewController { homeController.configureUI() }
+					self.dismiss(animated: true)
+				})
+			}
+		} else {
+			self.generateErrorAlert(title: "Fail to sign up", message: "Please make sure your passwords match.", okTitle: "OK")
+			return
+		}
 	}
 }
 
@@ -306,33 +305,36 @@ extension RegisterViewController: UITextFieldDelegate {
 		}
 
 		if textField == passwordTextField, usernameTextField.text != "", passwordTextField.text != "" {
-			print("회원가입!!!!!!!!!!!!!!")
-			passwordTextField.resignFirstResponder()
-			onSignUp()
+			passwordTextCheckField.becomeFirstResponder()
+		}
+
+		if textField == passwordTextCheckField, usernameTextField.text != "", passwordTextField.text != "", passwordTextCheckField.text != "" {
+			passwordTextCheckField.resignFirstResponder()
+			self.onSignUp()
 		}
 		return true
 	}
 }
 
 #if DEBUG
-import SwiftUI
+	import SwiftUI
 
-struct MainViewControllerPresentable2: UIViewControllerRepresentable {
-  func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+	struct MainViewControllerPresentable2: UIViewControllerRepresentable {
+		func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
-  }
-  func makeUIViewController(context: Context) -> some UIViewController {
-	RegisterViewController()
-  }
-}
+		}
+		func makeUIViewController(context: Context) -> some UIViewController {
+			RegisterViewController()
+		}
+	}
 
-struct ViewControllerPrepresentable_PreviewProvider2: PreviewProvider {
-  static var previews: some View {
-	  MainViewControllerPresentable2()
-	  .previewDevice("iphone 12 mini")
-	  .previewDisplayName("iphone 12 mini")
-	  .ignoresSafeArea()
-  }
-}
+	struct ViewControllerPrepresentable_PreviewProvider2: PreviewProvider {
+		static var previews: some View {
+			MainViewControllerPresentable2()
+				.previewDevice("iphone 12 mini")
+				.previewDisplayName("iphone 12 mini")
+				.ignoresSafeArea()
+		}
+	}
 
 #endif
